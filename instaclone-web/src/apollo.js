@@ -13,7 +13,7 @@ export const logUserIn = (token) => {
 //같은 로직으로 로그아웃 하는 경우 저장된 토큰을 삭제해주고 로그인 정보를 flase로 변경해주어야 한다.
 export const logUserOut = (token) => {
   localStorage.removeItem(TOKEN);
-  isLoggedInVar(false);
+  window.location.reload(); //로그아웃을 하면 이렇게 reload를 해서 깨끗하게 해줄 수 있다.
 };
 
 export const darkModeVar = makeVar(false);

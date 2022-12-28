@@ -5,6 +5,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { logUserIn } from "../apollo";
 import AuthLayout from "../components/auth/AuthLayout";
@@ -25,6 +26,10 @@ const FacebookLogin = styled.div`
   }
 `;
 
+const Notification = styled.div`
+  color: #2ecc71;
+`;
+
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -36,6 +41,8 @@ const LOGIN_MUTATION = gql`
 `;
 
 function Login() {
+  const location = useLocation();
+  console.log(location);
   const {
     register,
     handleSubmit,
@@ -46,6 +53,10 @@ function Login() {
     clearErrors,
   } = useForm({
     mode: "onChange",
+    defaultValues: {
+      username: location?.state?.username || "",
+      password: location?.state?.password || "",
+    }, //이렇게 default values를 넣어주면 아래에 있는 input에서 같은 이름을 가지고 있는 아이들에 알아서 넣어준다... 짱편함..
   });
   const onCompleted = (data) => {
     //gql을 보내서 결과를 받아온다.
@@ -87,6 +98,7 @@ function Login() {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
+        <Notification>{location?.state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             ref={register({
